@@ -118,9 +118,9 @@ public class Service {
                     m = p.matcher(tab[i].trim());
                     if(m.matches())
                     {
-                        p = Pattern.compile("(<td class=\"bgt\\d.? right\">(\\d{1,2},\\d{4})</td>)");
+                        p = Pattern.compile("<td class=\"bgt\\d.? right\">(\\d{1,2},\\d{4})</td>");
                         m = p.matcher(tab[i+1].trim());
-                        kurs = Double.parseDouble(m.group(2).replace(",","."));
+                        kurs = Double.parseDouble(m.group(1).replace(",","."));
                         break;
                     }
                 }
