@@ -71,7 +71,7 @@ public class Service {
     String getWeather(String miasto) {
         JSONObject jsonObject;
         try {
-            String pogoda = "Pogoda dla: " + miasto + "\n";
+            String pogoda = "Pogoda dla: " + miasto.substring(0,1).toUpperCase() + miasto.substring(1).toLowerCase() + "\n";
             jsonObject = new JSONObject(getURLConnection("http://api.openweathermap.org/data/2.5/weather?q=" + miasto + "&appid=" + klucz));
             pogoda += "Temperatura: " + jsonObject.getJSONObject("main").getDouble("temp") + "\n";
             pogoda += "Temperatura minimalna: " + jsonObject.getJSONObject("main").getDouble("temp_min") + "\n";
@@ -118,9 +118,12 @@ public class Service {
                     m = p.matcher(tab[i].trim());
                     if(m.matches())
                     {
-                        p = Pattern.compile("<td class=\"bgt\\d.? right\">(\\d{1,2},\\d{4})</td>");
+                        p = Pattern.compile("(<td class=\"bgt\\d.? right\">(\\d{1,2},\\d{4})</td>)");
                         m = p.matcher(tab[i+1].trim());
-                        kurs = Double.parseDouble(m.group(1).replace(",","."));
+//                        System.out.println(m.matches());
+//                        System.out.println(m.group(1));
+//                        System.out.println(m.group(2));
+                        kurs = Double.parseDouble(m.group(2).replace(",","."));
                         break;
                     }
                 }
