@@ -120,9 +120,9 @@ public class Service {
                     {
                         p = Pattern.compile("(<td class=\"bgt\\d.? right\">(\\d{1,2},\\d{4})</td>)");
                         m = p.matcher(tab[i+1].trim());
-//                        System.out.println(m.matches());
-//                        System.out.println(m.group(1));
-//                        System.out.println(m.group(2));
+                        System.out.println(m.matches());
+                        System.out.println(m.group(1));
+                        System.out.println(m.group(2));
                         kurs = Double.parseDouble(m.group(2).replace(",","."));
                         break;
                     }
