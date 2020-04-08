@@ -19,11 +19,10 @@ import java.util.Locale;
 public class Time {
 
     public static String passed(String from, String to) {
-        String result;
-        LocalDate fromLd = null;
-        LocalDate toLd = null;
-        LocalDateTime fromLdt = null;
-        LocalDateTime toLdt = null;
+        LocalDate fromLd;
+        LocalDate toLd;
+        LocalDateTime fromLdt;
+        LocalDateTime toLdt;
         long years;
         long months;
         long days;
@@ -41,8 +40,8 @@ public class Time {
                weeks = String.format(none,"%.2f", ChronoUnit.DAYS.between(fromLd, toLd)/7.0);
                String dpatt = "d MMMM yyyy (EEEE)";
                String fromResult = fromLd.format(DateTimeFormatter.ofPattern(dpatt));
-               String toResult = fromLd.format(DateTimeFormatter.ofPattern(dpatt));
-               return result = "Od " + fromResult + "do " + toResult + "\n - mija: " + days + " dni, tygodni " + weeks + "\n- kalendarzowo: " + years + " rok, " + months + " miesiąc, " + days + " dni";
+               String toResult = toLd.format(DateTimeFormatter.ofPattern(dpatt));
+               return "Od " + fromResult + " do " + toResult + "\n - mija: " + days + " dni, tygodni " + weeks + "\n - kalendarzowo: " + years + " lata, " + months + " miesiące, " + days + " dni";
            } catch (DateTimeParseException ex) {
                fromLdt = LocalDateTime.parse(from);
                toLdt = LocalDateTime.parse(to);
@@ -50,16 +49,17 @@ public class Time {
                ZonedDateTime zdt2 = ZonedDateTime.of(toLdt, ZoneId.of("Europe/Warsaw"));
                minutes = ChronoUnit.MINUTES.between(zdt1, zdt2);
                hours = ChronoUnit.HOURS.between(zdt1, zdt2);
+               years = ChronoUnit.YEARS.between(fromLdt, toLdt);
                days = ChronoUnit.DAYS.between(zdt1, zdt2);
                Locale none = new Locale("xx");
                weeks = String.format(none,"%.2f", ChronoUnit.DAYS.between(fromLdt, toLdt)/7.0);
                String tpatt = "d MMMM yyyy (EEEE) 'godz.' HH:mm";
                String fromResult = fromLdt.format(DateTimeFormatter.ofPattern(tpatt));
                String toResult = fromLdt.format(DateTimeFormatter.ofPattern(tpatt));
-               return result = "Od " + fromResult + "  do " + toResult + "\n - mija: " + days + " dzień, tygodni " + weeks + "\n" + "-godzin: " + hours +", minut: " + minutes + "\n- kalendarzowo: ";
+               return "Od " + fromResult + " do " + toResult + "\n - mija: " + days + " dzień, tygodni " + weeks + "\n" + " - godzin: " + hours +", minut: " + minutes + "\n - kalendarzowo: " + years + " lata";
            }
         } catch (DateTimeParseException ex) {
-            return ex.getParsedString() + ex.getMessage();
+            return "*** " + ex.toString();
         }
     }
 }
