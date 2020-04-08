@@ -20,7 +20,6 @@ public class Tools {
         Yaml yaml = new Yaml();
         InputStream inputStream = new FileInputStream(fileName);
         Map map = (Map) yaml.load(inputStream);
-
         String host = map.get("host").toString();
         int port = Integer.parseInt(map.get("port").toString());
         boolean concurMode = (boolean) map.get("concurMode");
