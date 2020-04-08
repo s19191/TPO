@@ -9,13 +9,12 @@ package zad3;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Time {
 
@@ -28,6 +27,7 @@ public class Time {
         long years;
         long months;
         long days;
+        long minutes;
         String weeks;
         try {
            try {
@@ -41,14 +41,21 @@ public class Time {
                String dpatt = "d MMMM yyyy (EEEE)";
                String fromResult = fromLd.format(DateTimeFormatter.ofPattern(dpatt));
                String toResult = fromLd.format(DateTimeFormatter.ofPattern(dpatt));
-               return result = "Od " + fromResult + "do " + toResult + "\n- mija: " + days + " dni, tygodni " +weeks + "\n- kalendarzowo: " + years + " rok, " + months + " miesiąc, "+days+ " dni";
+               return result = "Od " + fromResult + "do " + toResult + "\n- mija: " + days + " dni, tygodni " + weeks + "\n- kalendarzowo: " + years + " rok, " + months + " miesiąc, " + days + " dni";
            } catch (DateTimeParseException ex) {
                fromLdt = LocalDateTime.parse(from);
                toLdt = LocalDateTime.parse(to);
+               ZonedDateTime zdt1 = ZonedDateTime.of(fromLdt, ZoneId.of("Europe/Warsaw"));
+               ZonedDateTime zdt2 = ZonedDateTime.of(toLdt, ZoneId.of("Europe/Warsaw"));
+               minutes = ChronoUnit.MINUTES.between(zdt1, zdt2);
+               days = ChronoUnit.DAYS.between(fromLd, toLd);
+               Locale none = new Locale("xx");
+               weeks = String.format(none,"%.2f", ChronoUnit.DAYS.between(fromLd, toLd)/7.0);
+               String tpatt = "d MMMM yyyy (EEEE) 'godz.' HH:mm";
+               String fromResult = fromLd.format(DateTimeFormatter.ofPattern(tpatt));
+               String toResult = fromLd.format(DateTimeFormatter.ofPattern(tpatt));
+               return result = "Od " + fromResult + "do " + toResult + "\n- mija: " + days + " dni, tygodni " + weeks + "\n- kalendarzowo: " + years + " rok, " + months + " miesiąc, " + days + " dni";
            }
-
-            String tpatt = "d MMMM yyyy (EEEE) 'godz.' HH:mm";
-
         } catch (DateTimeParseException ex) {
             return ex.getLocalizedMessage();
         }
