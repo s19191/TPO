@@ -17,6 +17,14 @@ import java.util.Map;
 public class Tools {
 
     static Options createOptionsFromYaml(String fileName) throws Exception {
+        // tu mi nadal nie działa mądrzejsza kwestia
+
+//        Yaml yaml = new Yaml();
+//        InputStream inputStream = Options.class.getClass()
+//                .getClassLoader()
+//                .getResourceAsStream(fileName);
+//        Options result = yaml.load(inputStream);
+//        System.out.println(result);
         Yaml yaml = new Yaml();
         InputStream inputStream = new FileInputStream(fileName);
         Map map = (Map) yaml.load(inputStream);
