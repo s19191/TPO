@@ -7,27 +7,36 @@
 package zad4;
 
 
-public class Server implements Runnable{
+import java.io.IOException;
+import java.nio.channels.*;
+
+public class Server{
+    Selector s;
+    ServerSocketChannel scch
 
     public Server(String host, int port){
-
     }
 
     public void startServer(){
-        this.run();
+        try {
+            s = Selector.open();
+            scch = ServerSocketChannel.open();
+            SelectionKey key = scch.register(s, SelectionKey.OP_READ);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void stopServer(){
-        //this.wait();
+        try {
+            s.close();
+            scch.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     String getServerLog(){
         return null;
-    }
-
-
-    @Override
-    public void run() {
-
     }
 }
