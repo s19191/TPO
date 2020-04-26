@@ -20,14 +20,14 @@ public class Client {
     String id;
     SocketChannel server;
     InetSocketAddress client;
-    ByteBuffer buffer;
+    ByteBuffer bufferRead;
 
     public Client(String host, int port, String id) {
         this.host = host;
         this.port = port;
         this.id = id;
         client = new InetSocketAddress(host,port);
-        buffer = ByteBuffer.allocate(1024);
+        bufferRead = ByteBuffer.allocate(1024);
     }
 
     public void connect(){
@@ -40,16 +40,16 @@ public class Client {
     }
 
     public String send(String req){
-        String response = "";
-        try
-        {
+        String result = "";
+        try {
             server.write(StandardCharsets.UTF_8.encode(id + "_" + req));
-            server.read(buffer);
-            buffer.flip();
-            response += (StandardCharsets.UTF_8.decode(buffer));
-            buffer.clear();
+            server.read(bufferRead);
+            bufferRead.flip();
+            result += (StandardCharsets.UTF_8.decode(bufferRead));
+            bufferRead.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (IOException ignored){}
-        return response;
+        return result;
     }
 }

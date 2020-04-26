@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,18 +25,17 @@ public class Server{
     Selector selector;
     ServerSocketChannel serverChannel;
     InetSocketAddress serverAddress;
-    ByteBuffer read;
+    ByteBuffer bufferRead;
     ExecutorService executorService;
     Map<String, List<String>> clogs;
     List<String> serverLog;
-
     boolean isRunning;
 
     public Server(String host, int port){
         this.host = host;
         this.port = port;
         serverAddress = new InetSocketAddress(host,port);
-        read = ByteBuffer.allocate(1024);
+        bufferRead = ByteBuffer.allocate(1024);
         executorService = Executors.newSingleThreadExecutor();
         clogs = new LinkedHashMap<>();
         serverLog = new ArrayList<>();
@@ -96,10 +94,10 @@ public class Server{
             }
             if (key.isReadable()) {
                 SocketChannel client = (SocketChannel) key.channel();
-                client.read(read);
-                read.flip();
-                String whatReaded = StandardCharsets.UTF_8.decode(read).toString();
-                read.clear();
+                client.read(bufferRead);
+                bufferRead.flip();
+                String whatReaded = StandardCharsets.UTF_8.decode(bufferRead).toString();
+                bufferRead.clear();
                 String[] tmp = whatReaded.split("_");
                 String clientId = tmp[0];
                 if (!clogs.containsKey(clientId)) {
