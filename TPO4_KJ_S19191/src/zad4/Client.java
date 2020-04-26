@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
 
 public class Client {
 
@@ -21,6 +22,8 @@ public class Client {
     SocketChannel server;
     InetSocketAddress client;
     ByteBuffer bufferRead;
+    Charset charset = Charset.forName("UTF-8");
+    ExecutorService executorService;
 
     public Client(String host, int port, String id) {
         this.host = host;
@@ -42,10 +45,10 @@ public class Client {
     public String send(String req){
         String result = "";
         try {
-            server.write(StandardCharsets.UTF_8.encode(id + "_" + req));
+            server.write(charset.encode(id + "_" + req));
             server.read(bufferRead);
             bufferRead.flip();
-            result += (StandardCharsets.UTF_8.decode(bufferRead));
+            result += (charset.decode(bufferRead));
             bufferRead.clear();
         } catch (IOException e) {
             e.printStackTrace();

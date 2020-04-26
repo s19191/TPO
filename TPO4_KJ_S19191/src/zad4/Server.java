@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -29,7 +29,8 @@ public class Server{
     ExecutorService executorService;
     Map<String, List<String>> clogs;
     List<String> serverLog;
-    boolean isRunning;
+    Charset charset = Charset.forName("UTF-8");
+    boolean serverIsRunning;
 
     public Server(String host, int port){
         this.host = host;
@@ -42,22 +43,24 @@ public class Server{
     }
 
     public void startServer() {
-        isRunning = true;
+        serverIsRunning = true;
         try {
             selector = Selector.open();
             serverChannel = ServerSocketChannel.open();
             serverChannel.bind(serverAddress);
             serverChannel.configureBlocking(false);
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-            executorService.execute(() -> {
-                try {
-                    while (isRunning) {
-                        this.loop();
+            synchronized (executorService){
+                executorService.execute(() -> {
+                    try {
+                        while (serverIsRunning) {
+                            this.loop();
+                        }
+                    } catch (Throwable t) {
+                        t.printStackTrace();
                     }
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            });
+                });
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,7 +68,7 @@ public class Server{
 
     public void stopServer() {
         executorService.shutdownNow();
-        isRunning = false;
+        serverIsRunning = false;
     }
 
     String getServerLog(){
@@ -96,7 +99,7 @@ public class Server{
                 SocketChannel client = (SocketChannel) key.channel();
                 client.read(bufferRead);
                 bufferRead.flip();
-                String whatReaded = StandardCharsets.UTF_8.decode(bufferRead).toString();
+                String whatReaded = charset.decode(bufferRead).toString();
                 bufferRead.clear();
                 String[] tmp = whatReaded.split("_");
                 String clientId = tmp[0];
@@ -119,7 +122,7 @@ public class Server{
                             serverLogInfo = clientId + " logged out at " + timeNow;
                             clogs.get(clientId).add(ans);
                             serverLog.add(serverLogInfo);
-                            client.write(StandardCharsets.UTF_8.encode(ans));
+                            client.write(charset.encode(ans));
                             break;
                         }
                         default: {
@@ -127,7 +130,7 @@ public class Server{
                             serverLogInfo = clientId + " Nie znana komenda at " + timeNow;
                             clogs.get(clientId).add(ans);
                             serverLog.add(serverLogInfo);
-                            client.write(StandardCharsets.UTF_8.encode(ans));
+                            client.write(charset.encode(ans));
                             break;
                         }
                     }
@@ -138,7 +141,7 @@ public class Server{
                             serverLogInfo = clientId + " logged in at " + timeNow;
                             clogs.get(clientId).add(ans);
                             serverLog.add(serverLogInfo);
-                            client.write(StandardCharsets.UTF_8.encode(ans));
+                            client.write(charset.encode(ans));
                             break;
                         }
                         case "bye": {
@@ -150,13 +153,13 @@ public class Server{
                                 for (String s : clogs.get(clientId)) {
                                     ans += s + "\n";
                                 }
-                                client.write(StandardCharsets.UTF_8.encode(ans));
+                                client.write(charset.encode(ans));
                             } else {
                                 ans = "Nie znana komenda";
                                 serverLogInfo = clientId + " Nie znana komenda at " + timeNow;
                                 clogs.get(clientId).add(ans);
                                 serverLog.add(serverLogInfo);
-                                client.write(StandardCharsets.UTF_8.encode(ans));
+                                client.write(charset.encode(ans));
                             }
                             break;
                         }
@@ -167,7 +170,7 @@ public class Server{
                             serverLogInfo = clientId + " request at " + timeNow + ": \"" + req + "\"";
                             clogs.get(clientId).add(ans);
                             serverLog.add(serverLogInfo);
-                            client.write(StandardCharsets.UTF_8.encode(ans));
+                            client.write(charset.encode(ans));
                             break;
                         }
                     }
