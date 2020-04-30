@@ -7,19 +7,21 @@
 package zad4;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class ClientTask extends FutureTask<String> {
-    Client c;
-    List<String> reqs;
-    boolean showSendRes;
-    volatile String log;
 
-    public ClientTask(Callable<String> callable) {
+    static Map<Client,String> logs = new HashMap<>();
+    Client c;
+
+    public ClientTask(Callable<String> callable, Client c) {
         super(callable);
+        this.c = c;
     }
 
     public static ClientTask create(Client c, List<String> reqs, boolean showSendRes){
@@ -39,12 +41,14 @@ public class ClientTask extends FutureTask<String> {
                 }
                 log = c.send("bye and log transfer");
             }
+            logs.put(c, log);
             return log;
         };
-        return new ClientTask(callable);
+        return new ClientTask(callable, c);
     }
 
     public String get() throws InterruptedException, ExecutionException {
-        return null;
+        while (!this.isDone());
+        return logs.get(c);
     }
 }
