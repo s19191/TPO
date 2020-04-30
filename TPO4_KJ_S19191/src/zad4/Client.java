@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
-import java.util.concurrent.ExecutorService;
 
 public class Client {
 
@@ -23,7 +22,6 @@ public class Client {
     InetSocketAddress client;
     ByteBuffer bufferRead;
     Charset charset = Charset.forName("UTF-8");
-    ExecutorService executorService;
 
     public Client(String host, int port, String id) {
         this.host = host;

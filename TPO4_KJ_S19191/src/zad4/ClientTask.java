@@ -8,35 +8,24 @@ package zad4;
 
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
-public class ClientTask implements Runnable {
+public class ClientTask extends FutureTask<String> {
     Client c;
     List<String> reqs;
     boolean showSendRes;
     volatile String log;
-    ExecutorService executorService;
+
+    public ClientTask(Callable<String> callable) {
+        super(callable);
+    }
 
     public static ClientTask create(Client c, List<String> reqs, boolean showSendRes){
-        return new ClientTask(c,reqs,showSendRes);
-    }
-
-    public ClientTask(Client c, List<String> reqs, boolean showSendRes) {
-        this.c = c;
-        this.reqs = reqs;
-        this.showSendRes = showSendRes;
-        executorService = Executors.newSingleThreadExecutor();
-    }
-
-    String get() throws InterruptedException, ExecutionException {
-        return null;
-    }
-    @Override
-    public void run() {
-        executorService.execute(() -> {
+        Callable<String> callable = () -> {
             c.connect();
+            String log = "";
             if (showSendRes) {
                 System.out.println(c.send("login " + c.id));
                 for (String request : reqs) {
@@ -50,6 +39,12 @@ public class ClientTask implements Runnable {
                 }
                 log = c.send("bye and log transfer");
             }
-        });
+            return log;
+        };
+        return new ClientTask(callable);
+    }
+
+    public String get() throws InterruptedException, ExecutionException {
+        return null;
     }
 }

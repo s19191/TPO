@@ -43,27 +43,30 @@ public class Server{
     }
 
     public void startServer() {
-        serverIsRunning = true;
-        try {
-            selector = Selector.open();
-            serverChannel = ServerSocketChannel.open();
-            serverChannel.bind(serverAddress);
-            serverChannel.configureBlocking(false);
-            serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-            synchronized (executorService){
-                executorService.execute(() -> {
-                    try {
-                        while (serverIsRunning) {
-                            this.loop();
+        Thread server = new Thread(() -> {
+            serverIsRunning = true;
+            try {
+                selector = Selector.open();
+                serverChannel = ServerSocketChannel.open();
+                serverChannel.bind(serverAddress);
+                serverChannel.configureBlocking(false);
+                serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+                synchronized (executorService) {
+                    executorService.execute(() -> {
+                        try {
+                            while (serverIsRunning) {
+                                this.loop();
+                            }
+                        } catch (Throwable t) {
+                            t.printStackTrace();
                         }
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
+        server.start();
     }
 
     public void stopServer() {
