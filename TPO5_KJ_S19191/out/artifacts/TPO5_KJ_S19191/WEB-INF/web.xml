@@ -9,18 +9,8 @@
     </context-param>
 
     <context-param>
-        <param-name>presentationServletAllBooks</param-name>
-        <param-value>/presentationAllBooks</param-value>
-    </context-param>
-
-    <context-param>
         <param-name>getParamsServletSearch</param-name>
         <param-value>/getParamsSearch</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>getParamsServletAllBooks</param-name>
-        <param-value>/getParamsAllBooks</param-value>
     </context-param>
 
     <context-param>
@@ -29,18 +19,8 @@
     </context-param>
 
     <context-param>
-        <param-name>ResBundleServletAllBooks</param-name>
-        <param-value>/resBundleAllBooks</param-value>
-    </context-param>
-
-    <context-param>
         <param-name>resBundleSearchName</param-name>
         <param-value>DbAccessDef_plSearch</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>resBundleAllBooksName</param-name>
-        <param-value>DbAccessDef_plAllBooks</param-value>
     </context-param>
 
     <context-param>
@@ -51,11 +31,6 @@
     <context-param>
         <param-name>commandSearchClassName</param-name>
         <param-value>DbAccessSearch</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>commandAllBooksClassName</param-name>
-        <param-value>DbAccessAllBooks</param-value>
     </context-param>
 
     <servlet>
@@ -87,16 +62,38 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>GetParamsServletAllBooks</servlet-name>
-        <servlet-class>GetParamsServletAllBooks</servlet-class>
+        <servlet-name>AllBooksServlet</servlet-name>
+        <servlet-class>AllBooksServlet</servlet-class>
         <init-param>
             <param-name>startForm</param-name>
             <param-value>start.html</param-value>
         </init-param>
+        <init-param>
+            <param-name>endForm</param-name>
+            <param-value>end.html</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>GetParamsServletAllBooks</servlet-name>
-        <url-pattern>/getParamsAllBooks</url-pattern>
+        <servlet-name>AllBooksServlet</servlet-name>
+        <url-pattern>/allBooks</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SearchTitleServlet</servlet-name>
+        <servlet-class>SearchTitleServlet</servlet-class>
+        <init-param>
+            <param-name>startForm</param-name>
+            <param-value>startSearchTitle.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>endForm</param-name>
+            <param-value>end.html</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SearchTitleServlet</servlet-name>
+        <url-pattern>/searchTitle</url-pattern>
     </servlet-mapping>
 </web-app>

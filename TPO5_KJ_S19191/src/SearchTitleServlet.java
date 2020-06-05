@@ -13,20 +13,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet("/searchkk")
-public class Search extends HttpServlet {
+@WebServlet("/searchTitle")
+public class SearchTitleServlet extends HttpServlet {
 
     DataSource dataSource;
     private PrintWriter out;
-
-    private void printEndTag() {
-        out.println("</div>");
-        out.println("<div id=\"footer\"></div>");
-        out.println("</div>");
-        out.println("</div>");
-        out.println("</body>");
-        out.println("</html>");
-    }
 
     public void init() throws ServletException {
         try {
@@ -43,17 +34,21 @@ public class Search extends HttpServlet {
         resp.setContentType("text/html; charset=utf-8");
         out = resp.getWriter();
 
-        String formFile = getInitParameter("seachBookForm");
+        String formFileStart = getInitParameter("startForm");
         ServletContext context = getServletContext();
-        InputStream in = context.getResourceAsStream("/WEB-APP/"+formFile);
-        BufferedReader br = new BufferedReader( new InputStreamReader(in));
-
+        InputStream in = context.getResourceAsStream("/WEB-INF/" + formFileStart);
+        Reader reader = new InputStreamReader(in, "UTF-8");
+        BufferedReader br = new BufferedReader(reader);
         String line;
         while ((line = br.readLine()) != null) out.println(line);
         String formTitle = req.getParameter("tytul");
 
         if (formTitle == null) {
-            printEndTag();
+            String formFileEnd = getInitParameter("endForm");
+            in = context.getResourceAsStream("/WEB-INF/"+formFileEnd);
+            reader = new InputStreamReader(in, "UTF-8");
+            br = new BufferedReader(reader);
+            while ((line = br.readLine()) != null) out.println(line);
             out.close();
             return;
         }
@@ -79,7 +74,12 @@ public class Search extends HttpServlet {
             out.println(exc.getMessage());
         } finally {
             try {
-                printEndTag();
+                String formFileEnd = getInitParameter("endForm");
+                in = context.getResourceAsStream("/WEB-INF/"+formFileEnd);
+                reader = new InputStreamReader(in, "UTF-8");
+                br = new BufferedReader(reader);
+                while ((line = br.readLine()) != null) out.println(line);
+                con.close();
                 con.close();
             } catch (Exception exc) {}
         }

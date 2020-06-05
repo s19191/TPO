@@ -73,8 +73,9 @@ public class GetParamsServletSearch extends HttpServlet {
         String formFile = getInitParameter("startForm");
 
         ServletContext context = getServletContext();
-        InputStream in = context.getResourceAsStream("/WEB-APP/"+formFile);
-        BufferedReader br = new BufferedReader( new InputStreamReader(in));
+        InputStream in = context.getResourceAsStream("/WEB-INF/" + formFile);
+        Reader reader = new InputStreamReader(in, "UTF-8");
+        BufferedReader br = new BufferedReader(reader);
         String line;
         while ((line = br.readLine()) != null) out.println(line);
 

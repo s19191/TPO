@@ -1,0 +1,30 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen,projection" />
+</head>
+<body>
+<div id="container">
+    <div id="wrapper">
+        <div id="header">
+            <h1><a>Moja baza danych książek</a></h1>
+        </div>
+        <div id="content">
+            <ul id="nav">
+                <li><a href="index.jsp" accesskey="h"><em>H</em>ome</a></li>
+                <li><a href="About.jsp" accesskey="a"><em>A</em>bout</a></li>
+                <li><a href="http://localhost:8081/TPO5_KJ_S19191/allBooks" accesskey="e"><em>W</em>szystkie książki</a></li>
+                <br>
+                <br>
+                <li><a href="http://localhost:8081/TPO5_KJ_S19191/search" accesskey="c"><em>W</em>yszukiwarka w formie zapytań SQL</a></li>
+                <li><a href="http://localhost:8081/TPO5_KJ_S19191/searchTitle" accesskey="c"><em>W</em>yszukiwarka po tytule</a></li>
+            </ul>
+            <div id="content_main">
+    <div style="text-align: center;">
+    <h2>Testowanie wyrażeń regularnych</h2></div>
+                <hr>
+                <form method="post">
+                    Tytuł: <br>
+                    <input type="text" size="30" name="tytul"><br>
+                    <br>
+                    <input type="submit" value="Pokaż wynik wyszukiwania">
+                </form>

@@ -1,21 +1,16 @@
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.sql.DataSource;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import javax.naming.*;
+import java.sql.*;
+import javax.sql.*;
 
-@WebServlet("/allBooksss")
+@WebServlet("/allBooks")
 public class AllBooksServlet extends HttpServlet {
 
     DataSource dataSource;
+    private PrintWriter out;
 
     public void init() throws ServletException {
         try {
@@ -29,29 +24,48 @@ public class AllBooksServlet extends HttpServlet {
     }
 
     public void serviceRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<String> books = new ArrayList<>();
+        String charset = "UTF-8";
+        req.setCharacterEncoding(charset);
+        resp.setContentType("text/html; charset=" + charset);
+        out = resp.getWriter();
         Connection con = null;
+
+        String formFileStart = getInitParameter("startForm");
+
+        ServletContext context = getServletContext();
+        InputStream in = context.getResourceAsStream("/WEB-INF/"+formFileStart);
+        Reader reader = new InputStreamReader(in, "UTF-8");
+        BufferedReader br = new BufferedReader(reader);
+        String line;
+        while ((line = br.readLine()) != null) out.println(line);
+        out.println("<h2><a>Wszystkie książki</a></h2>");
         try {
             synchronized (dataSource) {
                 con = dataSource.getConnection();
             }
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from POZYCJE inner join AUTOR on POZYCJE.AUTID = AUTOR.AUTID inner join WYDAWCA on POZYCJA.WYDID = WYDAWCA.WYDID");
-            String line;
-            while (rs.next()) {
+            ResultSet rs = stmt.executeQuery("select * from pozycje");
+            out.println("<ol>");
+            while (rs.next())  {
+                String tytul = rs.getString("tytul");
+                float cena  = rs.getFloat("cena");
+                out.println("<li>" + tytul + " - cena: " + cena + "</li>");
             }
             rs.close();
             stmt.close();
         } catch (Exception exc)  {
-
+            out.println(exc.getMessage());
         } finally {
             try {
+                String formFileEnd = getInitParameter("endForm");
+                in = context.getResourceAsStream("/WEB-INF/"+formFileEnd);
+                reader = new InputStreamReader(in, "UTF-8");
+                br = new BufferedReader(reader);
+                while ((line = br.readLine()) != null) out.println(line);
                 con.close();
             } catch (Exception exc) {}
         }
-//        req.setAttribute("allBooksList", books);
-//        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/allBooks.jsp");
-//        dispatcher.forward(req, resp);
+        out.close();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
