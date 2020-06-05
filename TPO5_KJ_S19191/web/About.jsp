@@ -30,7 +30,7 @@
             </ul>
             <div id="content_main">
                 <h2><a>Introduction</a></h2>
-                <p>Program został wykonany przez Jana Kwasowskiego. Wyszukiwanie w formie zapytań SQL jest zrobione w architekturze MVC, reszta niestety nie. Baza danych używana przeze mnie jest to baza danych używana na wykłądach. Wykdląd strony z strony:</p>
+                <p>Program został wykonany przez Jana Kwasowskiego. Wyszukiwanie w formie zapytań SQL jest zrobione w architekturze MVC, reszta niestety nie. Baza danych używana przeze mnie jest to baza danych używana na wykładach. Wykdląd strony z strony:</p>
                 <br>
                 <li><a href="https://www.free-css.com/free-css-templates/page18/the-old-forest">Link do strony</a></li>
             </div>
