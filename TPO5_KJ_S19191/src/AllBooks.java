@@ -4,9 +4,11 @@ import javax.servlet.http.*;
 import java.io.*;
 import javax.naming.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.sql.*;
 
-@WebServlet("/allBooks")
+@WebServlet("/allBookssdsd")
 public class AllBooks extends HttpServlet {
 
     DataSource dataSource;
@@ -39,7 +41,7 @@ public class AllBooks extends HttpServlet {
         out = resp.getWriter();
         Connection con = null;
 
-        String formFile = getInitParameter("allBooksForm");
+        String formFile = getInitParameter("startForm");
 
         ServletContext context = getServletContext();
         InputStream in = context.getResourceAsStream("/WEB-APP/"+formFile);

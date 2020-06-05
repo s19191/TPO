@@ -4,46 +4,99 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <context-param>
-        <param-name>presentationServ</param-name>
-        <param-value>/presentation</param-value>
+        <param-name>presentationServletSearch</param-name>
+        <param-value>/presentationSearch</param-value>
     </context-param>
 
     <context-param>
-        <param-name>getParamsServ</param-name>
-        <param-value>/getparams</param-value>
+        <param-name>presentationServletAllBooks</param-name>
+        <param-value>/presentationAllBooks</param-value>
     </context-param>
 
     <context-param>
-        <param-name>commandClassName</param-name>
-        <param-value>FindCommand</param-value>
+        <param-name>getParamsServletSearch</param-name>
+        <param-value>/getParamsSearch</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>getParamsServletAllBooks</param-name>
+        <param-value>/getParamsAllBooks</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>ResBundleServletSearch</param-name>
+        <param-value>/resBundleSearch</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>ResBundleServletAllBooks</param-name>
+        <param-value>/resBundleAllBooks</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>resBundleSearchName</param-name>
+        <param-value>DbAccessDef_plSearch</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>resBundleAllBooksName</param-name>
+        <param-value>DbAccessDef_plAllBooks</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>dbName</param-name>
+        <param-value>jdbc/ksidb</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>commandSearchClassName</param-name>
+        <param-value>DbAccessSearch</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>commandAllBooksClassName</param-name>
+        <param-value>DbAccessAllBooks</param-value>
     </context-param>
 
     <servlet>
-        <servlet-name>Search</servlet-name>
-        <servlet-class>Search</servlet-class>
+        <servlet-name>ErrorHandler</servlet-name>
+        <servlet-class>ErrorHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ErrorHandler</servlet-name>
+        <url-pattern>/errorhandler</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <exception-type>DbAccessException</exception-type>
+        <location>/errorhandler</location>
+    </error-page>
+
+    <servlet>
+        <servlet-name>GetParamsServletSearch</servlet-name>
+        <servlet-class>GetParamsServletSearch</servlet-class>
         <init-param>
-            <param-name>seachBookForm</param-name>
-            <param-value>search.html</param-value>
+            <param-name>startForm</param-name>
+            <param-value>start.html</param-value>
         </init-param>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Search</servlet-name>
-        <url-pattern>/search</url-pattern>
+        <servlet-name>GetParamsServletSearch</servlet-name>
+        <url-pattern>/getParamsSearch</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>AllBooks</servlet-name>
-        <servlet-class>AllBooks</servlet-class>
+        <servlet-name>GetParamsServletAllBooks</servlet-name>
+        <servlet-class>GetParamsServletAllBooks</servlet-class>
         <init-param>
-            <param-name>allBooksForm</param-name>
-            <param-value>allbooks.html</param-value>
+            <param-name>startForm</param-name>
+            <param-value>start.html</param-value>
         </init-param>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>AllBooks</servlet-name>
-        <url-pattern>/allBooks</url-pattern>
+        <servlet-name>GetParamsServletAllBooks</servlet-name>
+        <url-pattern>/getParamsAllBooks</url-pattern>
     </servlet-mapping>
-
 </web-app>

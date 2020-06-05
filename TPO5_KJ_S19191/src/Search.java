@@ -13,7 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet("/search")
+@WebServlet("/searchkk")
 public class Search extends HttpServlet {
 
     DataSource dataSource;
