@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/out/test/TPO5_KJ_S19191"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="Tomcat 9.0.351" scope="PROVIDED"/>
+	<levels>
+		<level name="Tomcat 9.0.351" value="application_server_libraries"/>
+		<level name="derby" value="project"/>
+	</levels>
+</component>
