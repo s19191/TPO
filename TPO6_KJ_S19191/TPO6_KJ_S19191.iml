@@ -9,5 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" exported="" name="JMS" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
