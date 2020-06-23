@@ -4,7 +4,7 @@ import javax.naming.*;
 import javax.jms.*;
 import java.util.Scanner;
 
-public class Client {
+public class User {
 
     public static void main(String[] args) {
 
@@ -14,7 +14,7 @@ public class Client {
         try {
             System.out.println("Podaj nazwę urzytkownika:");
             Scanner scanner = new Scanner(System.in);
-            String userName = scanner.nextLine();
+            String name = scanner.nextLine();
 
             Context ctx = new InitialContext();
             ConnectionFactory factory = (ConnectionFactory) ctx.lookup("ConnectionFactory");
@@ -25,7 +25,10 @@ public class Client {
 
             receiver = ses.createConsumer(dest);
             con.start();
-            receiver.setMessageListener(new SampleListener(userName));
+            //wybierając SampleListener1 wyświetlane będą wiadomości tylko od innych urzytkowników (te od siebie samego nie będą wyświetlane)
+            receiver.setMessageListener(new SampleListener1(name));
+            //wybierając SampleListener2 wyświetlane będą wszystkie wiadomości, nawet te wysłane przez siebie samego
+            //receiver.setMessageListener(new SampleListener2());
 
             sender = ses.createProducer(dest);
             sender.setDeliveryMode(DeliveryMode.PERSISTENT);
@@ -37,7 +40,7 @@ public class Client {
                     System.exit(0);
                 } else {
                     TextMessage sendMsg = ses.createTextMessage();
-                    sendMsg.setText("[" + userName + "] :" + messageToSend);
+                    sendMsg.setText("[" + name + "] :" + messageToSend);
                     sender.send(sendMsg);
                 }
             }
